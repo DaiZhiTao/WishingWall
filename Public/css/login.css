@@ -1,0 +1,235 @@
+/*
+    登录界面
+ */
+
+.login-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1000px;
+    height: 360px;
+    transform: translate(-45%,-50%);
+    background: rgba(255,255,255,.8);
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 50px;
+    overflow: hidden;
+}
+
+.right{
+    position: absolute;
+    width: 400px;
+    height:100%;
+    right: 0;
+    top: 0;
+    background: #111;
+    background: radial-gradient(#222, #000);
+    overflow: hidden;
+}
+
+@media screen and (max-width: 970px){
+    .login-box{
+        width: 500px;
+        height:400px;
+        transform: translate(-40%,-50%);
+    }
+    .right{
+        display: none;
+    }
+    .form-item{
+        padding: 10px 0;
+    }
+
+    .form-label{
+        text-align: left !important;
+        margin-bottom:5px;
+    }
+}
+
+
+.form-item{
+    width: 100%;
+    height:60px;
+    margin-bottom:10px;
+}
+
+.form-label{
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+    margin-right:20px;
+    font-size:16px;
+    color: #666;
+}
+
+.form-item input{
+    height:50px;
+    border:1px solid #f1f1f1;
+    outline: none;
+    font-size:16px;
+}
+
+.ti1{
+    text-indent: 1em;
+}
+
+.most{
+    width: 360px;
+}
+
+.rare{
+    width: 160px;
+}
+
+.vcode{
+    display: inline-block;
+    vertical-align: middle;
+    margin-left:40px;
+    height: 50px;
+    width: 100px;
+}
+
+.btn{
+    color: #999;
+    width: 120px;
+    cursor: pointer;
+    border:4px solid #f1f1f1 !important;
+    background: #f1f1f1;
+    border-radius:5px;
+}
+
+.btn:hover{
+    background: #fff;
+}
+
+.btn-submit{
+
+}
+
+.btn-reset{
+    margin-left:100px;
+}
+
+/*
+    注册界面
+ */
+
+.register-form{
+    position: absolute;
+    width: 666px;
+    height:560px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-45%,-50%);
+    background: rgba(255,255,255,.6);
+    color:#666;
+}
+
+@media screen and (max-width: 970px){
+    .register-form{
+        margin-top:-15px;
+        width: 444px;
+        height: 666px;
+        top: 0;
+        transform: translate(-45%,0);
+    }
+    .register-item{
+        height: 70px !important;
+    }
+    .register-input{
+        display: block;
+        width: 100%;
+        height:30px;
+        margin:0 auto;
+    }
+    .register-item label{
+        float: left;
+        display: block;
+        width: 100% !important;
+        height: 20px;
+        line-height:20px;
+        font-size:16px;
+        margin:10px 0;
+        text-align: center   !important;
+    }
+    .tips{
+        top:40px !important;
+        right:-40px !important;
+    }
+    .register-btn{
+        width: 100px !important;
+        height: 40px !important;
+    }
+}
+
+.register-item{
+    position: relative;
+    width: 100%;
+    height:60px;
+    line-height:60px;
+    font-size:18px;
+    margin:20px 0;
+}
+.register-item label{
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    margin-right:20px;
+}
+
+.register-input{
+    width: 400px;
+    height: 50px;
+    outline: none;
+    font-size:14px;
+    text-indent: 1em;
+    border:none ;
+}
+
+.tips{
+    display: none;
+    position: absolute;
+    top: 5px;
+    right:10px;
+    height:50px;
+    box-sizing: border-box;
+    padding:6px;
+    width: 120px;
+    word-wrap: break-word;
+    font-size:14px;
+    line-height:20px;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    background: #DC143C;
+}
+
+.register-corner{
+    position: absolute;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent #DC143C transparent transparent;
+    left:-15px;
+    top:50%;
+    margin-top:-8px;
+}
+
+.register-btn{
+    height:60px;
+    width: 120px;
+    border:none;
+    cursor: pointer;
+    margin-left:50px;
+    border-radius: 5px;
+    color: #fff;
+    border:5px solid #666;
+    background: #666;
+}
+
+.register-btn:hover{
+    color: #666;
+    background: #fff;
+}
+.register-submit{
+    margin-left:120px;
+}

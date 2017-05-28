@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./Public/css/base.css">
+    <link rel="stylesheet" href="./Public/css/login.css">
+    <script src="./Public/js/jqurey-3.1.0.js"></script>
+    <script src="./Public/js/base.js"></script>
+    <title>许愿墙</title>
+</head>
+<body>
+<div class="left-side">
+    <div class="nav">
+        <ul class="nav-bar">
+            <li class="icon"><a href="index.php?c=index&a=index" class="icon-login"></a>
+                <div class="tip"><div class="tip-triangle"></div>登录</div>
+            </li>
+            <li class="icon"><a href="index.php?c=index&a=register" class="icon-register"></a>
+                <div class="tip"><div class="tip-triangle"></div>注册</div>
+            </li>
+            <li class="icon"><a href="index.php?c=msg&a=index" class="icon-index"></a>
+                <div class="tip"><div class="tip-triangle"></div>许愿</div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="register-form">
+        <form action="index.php?c=user&a=register" method="post">
+            <div class="register-item">
+                <label for="account">账号</label><input class="register-input" type="text" name="account" id="account" placeholder="请填写您想注册的账户">
+                <div class="tips"><div class="register-corner"></div>对不起,账号已存在</div>
+            </div>
+            <div class="register-item">
+                <label for="nickname">昵称</label><input class="register-input" type="text" name="nickname" id="nickname" placeholder="请填写您的昵称">
+            </div>
+            <div class="register-item">
+                <label for="email">邮箱</label><input class="register-input" type="email" name="email" id="email" placeholder="请填写您的邮箱">
+            </div>
+            <div class="register-item">
+                <label for="password">密码</label><input class="register-input" type="password" name="password" id="password" placeholder="至少6位">
+                <div class="tips"><div class="register-corner"></div>密码不符合规则请重新输入</div>
+            </div>
+            <div class="register-item">
+                <label for="rep-passoword">重复密码</label><input class="register-input" type="password" name="password1" id="rep-password" placeholder="请再次输入您的密码">
+                <div class="tips"><div class="register-corner"></div>两次密码不一致请重新输入</div>
+            </div>
+            <div class="register-item">
+                <input id="submit" class="register-btn register-submit" type="submit" value="注册">
+                <input class="register-btn" type="reset" value="重置">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        $('.icon .tip').removeClass('active');
+        $('.icon-register+.tip').addClass('active');
+
+        $('#account').bind('keyup change',function(){
+           $.ajax({
+               type:'post',
+               url:'index.php?c=user&a=checkAccount',
+               data:{account:$(this).val()},
+               dataType:'json',
+               success:function(data){
+                   if(!data.status){
+                       $('#account').next('.tips').show();
+                   }else{
+                       $('#account').next('.tips').hide();
+                   }
+               }
+           });
+        });
+
+        $('#password').blur(function () {
+            if($(this).val().length<6){
+                $('#password').next('.tips').show();
+                $('#submit').attr('disabled','true');
+            }else{
+                $('#password').next('.tips').hide();
+                $('#submit').removeAttr('disabled');
+            }
+        });
+
+        $('#rep-password').blur(function () {
+            if($(this).val()!= $('#password').val()){
+                $(this).next('.tips').show();
+                $('#submit').attr('disabled','true');
+            }else{
+                $(this).next('.tips').hide();
+                $('#submit').removeAttr('disabled');
+            }
+        });
+
+        $('#submit').mouseenter(function () {
+            if($('#account').val() == ''){
+                alert("账号不能为空!");
+                $('#submit').attr('disabled','true');
+            }else if($('#password').val() == ''){
+                alert("密码不能为空!");
+                $('#submit').attr('disabled','true');
+            }else if($('#email').val() == ''){
+                alert("邮箱不能为空!");
+                $('#submit').attr('disabled','true');
+            }else{
+                $('#submit').removeAttr('disabled');
+            }
+        });
+    })
+</script>
+</html>

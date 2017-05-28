@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./Public/css/base.css">
+    <link rel="stylesheet" href="./Public/css/login.css">
+    <script src="./Public/js/jqurey-3.1.0.js"></script>
+    <script src="./Public/js/base.js"></script>
+    <script src="./Public/js/index.js"></script>
+    <title>许愿墙</title>
+</head>
+<body>
+    <div class="left-side">
+    <div class="nav">
+        <ul class="nav-bar">
+            <li class="icon"><a href="index.php?c=index&a=index" class="icon-login"></a>
+                <div class="tip"><div class="tip-triangle"></div>登录</div>
+            </li>
+            <li class="icon"><a href="index.php?c=index&a=register" class="icon-register"></a>
+                <div class="tip"><div class="tip-triangle"></div>注册</div>
+            </li>
+            <!--<li class="icon"><a href="index.php?c=msg&a=index" class="icon-index"></a>-->
+                <!--<div class="tip"><div class="tip-triangle"></div>许愿</div>-->
+            <!--</li>-->
+            <!--<li class="icon"><a href="index.php?c=user&a=logout" class="icon-exit"></a>-->
+                <!--<div class="tip"><div class="tip-triangle"></div>退出</div>-->
+            <!--</li>-->
+        </ul>
+    </div>
+</div>
+    <div class="container">
+        <div class="login-box">
+            <form action="index.php?c=user&a=login" method="post">
+                <div class="form-item">
+                    <label class="form-label" for="account">账号:</label><input class="most ti1" type="text" name="account" id="account" placeholder="请输入您的账户">
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="password">密码:</label><input class="most ti1" type="password" name="password" id="password" placeholder="请输入您的密码">
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="validation">验证码:</label><input class="ti1 rare" type="text" name="validate" id="validation" placeholder="请输入验证码">
+                    <img class="vcode" src="index.php?c=Verification&a=getValidationCode" onclick="this.src='index.php?c=Verification&a=getValidationCode&'+Math.random() ;"/>
+                </div>
+                <div class="form-item">
+                    <input id="submit" class="btn btn-submit" type="submit" value="登录">
+                    <input class="btn btn-reset" type="reset" value="重新填写">
+                </div>
+            </form>
+            <div class="right" id="right">
+                <!--<canvas id="waterfall"></canvas>-->
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function () {
+
+
+        $('.icon .tip').removeClass('active');
+        $('.icon-login+.tip').addClass('active');
+
+
+        $('#validation').blur(function(){
+            $.ajax({
+                type:'post',
+                url:'v.php?',
+                data:{data:$(this).val()},
+                dataType:'json',
+                success:function (data) {
+                    if(!data.status){
+                        alert("验证码输入错误!");
+                        $('#submit').attr('disabled','true');
+                    }else{
+                        $('#submit').removeAttr('disabled');
+                    }
+                }
+            });
+        });
+
+//        $('#submit').bind('mouseover',function () {
+//            $('#validation').trigger('blur');
+//            if($('#account').val() == ''){
+//                alert("请填写账号!");
+//                $(this).attr("disabled",true);
+//            }else if($('#password').val() == ''){
+//                $(this).attr("disabled",true);
+//                alert("请填写密码!");
+//            }else if($('#validation').val() == ''){
+//                $(this).attr("disabled",true);
+//                alert("请填写验证码!");
+//            }
+//
+//            if($('#account').val() != '' && $('#password').val() != '' &&$('#validation').val() != ''){
+//                $(this).removeAttr("disabled");
+//            }
+//
+//        });
+
+    })
+</script>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./Public/css/base.css">
+    <link rel="stylesheet" href="./Public/css/login.css">
+    <script src="./Public/js/jqurey-3.1.0.js"></script>
+    <title>许愿墙</title>
+</head>
+<body>
+<div class="left-side">
+    <div class="nav">
+        <ul class="nav-bar">
+            <li class="icon"><a href="index.php?c=msg&a=index" class="icon-index"></a>
+                <div class="tip"><div class="tip-triangle"></div>许愿</div>
+            </li>
+            <li class="icon"><a href="index.php?c=user&a=logout " class="icon-exit"></a>
+                <div class="tip"><div class="tip-triangle"></div>退出</div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="add-btn"></div>
+    <div class="modal">
+        <div class="modal-main">
+            <div class="oldman"></div>
+            <div class="close"></div>
+            <h2>请填写您的愿望</h2>
+            <div class="hope-blank">
+                <form action="" id="hope-form" enctype="multipart/form-data">
+                    <div class="hope-item">
+                        <label for="hope-title">标题</label>
+                        <input type="text" id="hope-title" name="title">
+                    </div>
+                    <div class="hope-item">
+                        <label for="hope-pic">请选择一张喜欢的图片</label>
+                        <input type="file" id="hope-pic" name="hope-pic">
+                    </div>
+                    <div class="hope-item">
+                        <label for="hope-content">内容</label>
+                        <textarea id="hope-content" name="content"></textarea>
+                    </div>
+                    <div class="hope-item">
+                        <input type="submit" value="发送你的愿望吧">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php foreach($this->hopes as $k=>$v){?>
+        <div class="box" id="<?php echo $k;?>">
+            <div class="flat front show on">
+                <div class="edit" index="<?php echo $k;?>"></div>
+                <div class="delete" index="<?php echo $k;?>"></div>
+                <a href="javascript:void(0);" class="poster">
+                    <img src="<?php echo $v['pic-path'];?>" alt="">
+                </a>
+                <p class="title"><?php echo $v['title'];?></p>
+            </div>
+            <div class="flat back">
+                <div class="content-box">
+                    <div class="content"><?php echo $v['content'];?></div>
+                    <p class="author">————<?php echo $v['name'];?></p>
+                </div>
+            </div>
+        </div>
+    <?php }?>
+</div>
+</body>
+<script>
+    $(function () {
+        function randomPosition(){
+            $('.box').not('.current').each(function () {
+                var angle = Math.random()*180;
+                $(this).css({
+                    left:Math.random()>0.5?(Math.random()*30+15)+"%":(Math.random()*30+60)+"%",
+                    top:Math.random()>0.5?(Math.random()*10+15)+"%":(Math.random()*30+60)+"%",
+                    transform:"rotateZ("+angle+"deg)",
+                    "-wewbkit-transform":"rotateZ("+angle+"deg)"
+                });
+            });
+        }
+
+        randomPosition();
+
+        $('.icon .tip').removeClass('active');
+        $('.icon-index+.tip').addClass('active');
+
+        $('.add-btn').click(function(){
+            $('.modal').show();
+            $('.oldman').show();
+
+            $('.modal-main').stop().animate({
+                left:"50%",
+                marginLeft:"-200px"
+            },2500,'swing',function(){
+                $('.oldman').stop().animate({
+                    left:"800px"
+                },2400,function(){
+                    $(this).hide();
+                });
+            });
+            $('.modal').attr({'operate':'delete','index':$(this).index});
+        });
+
+        $('.close').click(function(){
+            $('.modal').hide();
+            $('.modal-main').css({
+                left:'-340px'
+            });
+            $('.oldman').css({
+                left:'100%'
+            });
+        });
+
+        //  异步提交
+
+        $('#hope-form').submit(function (e) {
+            var formData = new FormData($('#hope-form')[0]);
+            e.preventDefault();
+            if($('.modal').attr('operate')=="edit"){
+                $.ajax({
+                    type:'post',
+                    url:'index.php?c=msg&a=edit&index='+$('.modal').attr('index'),
+                    data:formData,
+                    dataType:'json',
+                    processData: false,  // 告诉jQuery不要去处理发送的数据
+                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                    success: function (returndata){
+                       var  $t = $('#'+$('.modal').attr('index'));
+                       $t.find('.title').html(returndata.title);
+                       $t.find('.content').html(returndata.content);
+                       $t.find('.poster img').attr('src',returndata.path);
+                       $('.modal').hide();
+                       $('#hope-form').reset();
+                    }
+                });
+            }else{
+                $.ajax({
+                    type:'post',
+                    url:'index.php?c=msg&a=add',
+                    data:formData,
+                    dataType:'json',
+                    processData: false,  // 告诉jQuery不要去处理发送的数据
+                    contentType: false,   // 告诉jQuery不要去设置Content-Type请求头
+                    success: function (returndata){
+                        var left = Math.random()*200;
+                        var top = Math.random()*900;
+                        var lOrR = ['left','right'];
+                        var tOrB = ['top','bottom'];
+                        var angle = Math.random()*360;
+                        var style = lOrR[Math.floor(Math.random()*3)]+":"+left+"px;"+tOrB[Math.floor(Math.random()*3)]+"px;transform:rotateZ("+angle+"deg);-webkit-transform:rotateZ("+angle+"deg);-webkit-transform:rotateZ("+angle+"deg)";
+                        var str = "<div class='box' style="+style+">";
+                        str += "<div class='flat front show'><div class='edit' index='"+returndata.id+"'></div><div class='delete' index='"+returndata.id+"'></div>";
+                        str += "<a href='javascript:void(0);' class='poster'>";
+                        str += "<img src='"+returndata.path+"'>";
+                        str += "</a><p class='title'>"+returndata.title+"</p>";
+                        str += "</div><div class='flat back'><div class='content-box'><div class='content'>"+returndata.content+"</div>";
+                        str += "<p class='author'>————"+returndata.name+"</p></div></div></div>";
+                        $('.container').append(str);
+                        $('.modal').hide();
+                    }
+                });
+            }
+        });
+
+       //   点击旋转
+
+        $('.container').delegate('.current','click',function(){
+           if($('.current').find('.front').hasClass('show')){
+               setTimeout(function () {
+                   $('.current .front').removeClass('show');
+                   $('.current .back').addClass('show');
+               },300);
+               $('.current').css({
+                   transform:"rotateY(180deg)",
+                   "-webkit-transform":"rotateY(180deg)"
+               });
+           }else{
+               setTimeout(function () {
+                   $('.current .back').removeClass('show');
+                   $('.current .front').addClass('show');
+               },300);
+               $('.current').css({
+                   transform:"rotateY(0deg)",
+                   "-webkit-transform":"rotateY(0deg)"
+               });
+           }
+        });
+        //编辑
+        $('.container').delegate('.edit',"click",function (e) {
+            e.stopPropagation();
+            $('.modal').show();
+            $('.oldman').show();
+
+            $('.modal-main').stop().animate({
+                left:"50%",
+                marginLeft:"-200px"
+            },2500,'swing',function(){
+                $('.oldman').stop().animate({
+                    left:"800px"
+                },2400,function(){
+                    $(this).hide();
+                });
+            });
+            $('.modal').attr('index',$(this).attr('index'));
+            $('.modal').attr('operate','edit');
+
+            $('.modal #hope-title').val($(this).parents('.box').find('p.title').html());
+            $('.modal #hope-content').val($(this).parents('.box').find('div.content').html());
+        });
+
+        //删除功能
+        $('.container').delegate('.delete',"click",function (e) {
+            e.stopPropagation();
+            _this = $(this);
+            $.ajax({
+                type:'post',
+                url:"index.php?c=msg&a=delete",
+                data:{index:$(this).attr('index')},
+                dataType:'json',
+                success:function (data) {
+                    if(data.status){
+                        alert("删除成功");
+                        _this.parent('div').parent('div.box').remove();
+                    }else{
+                        alert("删除失败");
+                    }
+                }
+            });
+        });
+
+        //  点击切换当前显示
+
+        $('.container').delegate('.box','click',function(e){
+            e.stopPropagation();
+//           $(this).click(function(){
+               if(!($(this).hasClass('current'))){
+                   $(this).siblings('.box').removeClass('current');
+                   $(this).siblings('.box').find('.front').addClass('show');
+                   $(this).siblings('.box').find('.back').removeClass('show');
+                   $(this).siblings('.box').css({
+                       transform:"rotateY(0deg)",
+                       "-webkit-transform":"rotateY(0deg)"
+                   });
+                   randomPosition();
+                   $(this).find('div.front').addClass('show');
+                   $(this).find('div.back').removeClass('show');
+                   $(this).addClass('current').css({
+                       left:'50%',
+                       top:'50%',
+                       marginTop:'-200px',
+                       marginLeft:'-170px',
+                       transform:'rotateZ(0deg)',
+                       "-webkit-transform":'rotateZ(0deg)'
+                   });
+                   $('.current').trigger('click');
+               }
+//           });
+        });
+
+
+    })
+</script>
+</html>
